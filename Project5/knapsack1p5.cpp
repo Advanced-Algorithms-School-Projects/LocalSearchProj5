@@ -50,6 +50,7 @@ int main()
 		cout << "Reading knapsack instance" << endl;
 		knapsack k(fin);
 
+		randomKnapsack(k);
 		steepDescentKnapsack(k);
 
 		//string output = "knapsack8.output";
@@ -73,7 +74,6 @@ int main()
 void steepDescentKnapsack(knapsack &k) {
 	knapsack bestSol = knapsack(k);
 	bool done = false;
-	randomKnapsack(k);
 
 	while (!done) {
 		bestNeighbor(k);

@@ -52,7 +52,7 @@ int main()
 		knapsack k(fin);
 
 		greedyKnapsack(k);
-
+		simAnnealing(k);
 
 		//string output = "knapsack1024.output";
 		
