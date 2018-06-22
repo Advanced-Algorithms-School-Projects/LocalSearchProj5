@@ -29,9 +29,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="knapsack1p5.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="knapsack2p5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
