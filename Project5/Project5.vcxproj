@@ -115,6 +115,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="d_except.h" />
+    <ClInclude Include="d_matrix.h" />
+    <ClInclude Include="d_random.h" />
+    <ClInclude Include="knapsack.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="knapsack1p5.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
