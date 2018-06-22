@@ -67,6 +67,7 @@ knapsack::knapsack(const knapsack &k)
 	value.resize(n);
 	cost.resize(n);
 	selected.resize(n);
+	ratio.resize(n);
 	numObjects = k.getNumObjects();
 	costLimit = k.getCostLimit();
 
@@ -162,6 +163,20 @@ ostream &operator<<(ostream &ostr, const knapsack &k)
 	cout << endl;
 
 	return ostr;
+}
+
+bool operator==(const knapsack &k1, const knapsack &k2) {
+	if (k1.getNumObjects() != k2.getNumObjects()) {
+		return false;
+	}
+	for (int i = 0; i < k1.getNumObjects(); i++) {
+		if ((k1.getCost(i) != k2.getCost(i)) || (k1.getValue() != k1.getValue())) {
+			if ((k1.isSelected(i) & k2.isSelected(i))) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 void knapsack::printSolution()

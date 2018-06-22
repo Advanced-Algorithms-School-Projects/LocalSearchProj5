@@ -122,6 +122,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="knapsack1p5.cpp" />
+    <ClCompile Include="knapsack2p5.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\Documents\Advanced Algorithms\Project 1\knapsack\knapsack8.input" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
