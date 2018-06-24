@@ -1,5 +1,5 @@
-// Project 5 Graph Coloring 1: Solving graph coloring 
-// using local search
+// Project 5 Graph Coloring 2: Solving graph coloring 
+// using local search and 
 // Created by Patrick Hanbury and Cassandra Smith
 // Submitted 6/25/2018
 //
@@ -26,10 +26,11 @@ struct EdgeProperties;
 typedef adjacency_list<vecS, vecS, undirectedS, VertexProperties, EdgeProperties> Graph;
 
 void printSolution(Graph &g, int numConflicts, string filePath_output);
-void randGraph(Graph &g, int numColors, int &numConflicts);
 void steepDescent(Graph &g, int numColors, int &numConflicts);
 void getBestNeighbor(Graph &g, int numColors, int &numConflicts);
 int getConflicts(Graph &g);
+void greedyColoring(Graph &g, int numColors, int &numConflicts);
+void placeColor(Graph &g, Graph::vertex_iterator node, int &numConflicts, const int numColors);
 
 struct VertexProperties
 {
@@ -89,7 +90,7 @@ int main()
 	// Read the name of the graph from the keyboard or
 	// hard code it here for testing.
 
-	fileName = "color/color12-3.input";
+	fileName = "color/color96-7.input";
 
 	//   cout << "Enter filename" << endl;
 	//   cin >> fileName;
@@ -106,7 +107,7 @@ int main()
 		cout << "Reading graph" << endl;
 		Graph g;
 		int numColors;
-		int numConflicts = -1;
+		int numConflicts = 0;
 		fin >> numColors;
 		initializeGraph(g, fin);
 
@@ -114,7 +115,7 @@ int main()
 		cout << "Num edges: " << num_edges(g) << endl;
 		cout << endl;
 
-		randGraph(g, numColors, numConflicts);
+		greedyColoring(g, numColors, numConflicts);
 		steepDescent(g, numColors, numConflicts);
 		string output = "/Users/Cassie/source/repos/Project5/Project5/color12-3.output";
 		printSolution(g, numConflicts, output);
@@ -143,22 +144,6 @@ void printSolution(Graph &g, int numConflicts, string filePath_output) {
 	}
 
 	myfile.close();
-}
-
-
-void randGraph(Graph &g, int numColors, int &numConflicts) {
-	srand(time(0));
-	//gets start and end vertex iterators (which allow you to access the vertex)
-	pair<Graph::vertex_iterator, Graph::vertex_iterator> vItrRange = vertices(g);
-
-	Graph::vertex_iterator firstNode = vItrRange.first;
-	Graph::vertex_iterator lastNode = vItrRange.second;
-
-	//assign all vertcies to random colors
-	for (Graph::vertex_iterator vItr = firstNode; vItr != lastNode; ++vItr) {
-		g[*vItr].color = rand() % numColors;
-	}
-	numConflicts = getConflicts(g);
 }
 
 void steepDescent(Graph &g, int numColors, int &numConflicts) {
@@ -196,7 +181,7 @@ void getBestNeighbor(Graph &g, int numColors, int &numConflicts) {
 			temp = g[*vItr].color;
 			g[*vItr].color = g[*Itr].color;
 			g[*Itr].color = temp;
-			
+
 			if (getConflicts(g) < numConflicts) {
 				bestN = Graph(g);
 				numConflicts = getConflicts(bestN);
@@ -214,7 +199,7 @@ int getConflicts(Graph &g) {
 
 	Graph::vertex_iterator firstNode = vItrRange.first;
 	Graph::vertex_iterator lastNode = vItrRange.second;
-	
+
 	for (Graph::vertex_iterator vItr = firstNode; vItr != lastNode; ++vItr) {
 		// Get a pair containing iterators pointing to the beginning and end of the
 		// list of nodes adjacent to node v
@@ -228,4 +213,60 @@ int getConflicts(Graph &g) {
 		}
 	}
 	return numConflicts;
+}
+
+void greedyColoring(Graph &g, int numColors, int &numConflicts) {
+	//gets start and end vertex iterators (which allow you to access the vertex)
+	pair<Graph::vertex_iterator, Graph::vertex_iterator> vItrRange = vertices(g);
+
+	Graph::vertex_iterator firstNode = vItrRange.first;
+	Graph::vertex_iterator lastNode = vItrRange.second;
+
+	//assign all vertex colors to 0, meaning lack of color
+	for (Graph::vertex_iterator vItr = firstNode; vItr != lastNode; ++vItr) {
+		g[*vItr].color = 0;
+	}
+
+	//assign vertex colors using the greedy algorithm
+	for (Graph::vertex_iterator vItr = firstNode; vItr != lastNode; ++vItr) {
+		placeColor(g, vItr, numConflicts, numColors);
+	}
+}
+
+
+void placeColor(Graph &g, Graph::vertex_iterator node, int &numConflicts, const int numColors) {
+	vector<int> conflicts;
+	conflicts.resize(numColors + 1);
+
+	// Get a pair containing iterators pointing to the beginning and end of the
+	// list of nodes adjacent to node v
+	pair<Graph::adjacency_iterator, Graph::adjacency_iterator> adjRange = adjacent_vertices(*node, g);
+
+	// Adjacent node list is incorrect for our purposes
+	// Loop over adjacent nodes in the graph
+	for (Graph::adjacency_iterator Itr = adjRange.first; Itr != adjRange.second; ++Itr) {
+		conflicts[g[*Itr].color] += 1;
+	}
+
+	int minConflicts = numColors + 1;
+	int color; //variable to hold the color number
+
+			   //find minimum of conflicts vector
+			   //assign color corresponding to minimum number of conflicts
+	for (int i = 1; i <= numColors; i++) {
+		if (conflicts[i] < minConflicts) {
+			minConflicts = conflicts[i];
+			color = i;
+		}
+	}
+
+	//place color
+	g[*node].color = color;
+
+	//check if this node contains the max conflicts
+	if (minConflicts > numConflicts) {
+		numConflicts++;
+	}
+
+	return;
 }
