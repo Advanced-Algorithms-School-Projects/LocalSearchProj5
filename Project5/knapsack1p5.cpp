@@ -53,10 +53,12 @@ int main()
 		randomKnapsack(k);
 		steepDescentKnapsack(k);
 
-		//string output = "knapsack8.output";
+		string output = "/knapsack_SD_output/knapsack8.output";
 
 		cout << endl << "Best solution" << endl;
+		k.printSolution(output);
 		k.printSolution();
+		system("pause");
 	}
 
 	catch (indexRangeError &ex)
@@ -68,7 +70,6 @@ int main()
 		cout << ex.what() << endl; exit(1);
 	}
 
-	system("pause");
 }
 
 void steepDescentKnapsack(knapsack &k) {

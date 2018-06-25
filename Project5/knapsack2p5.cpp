@@ -34,7 +34,7 @@ int main()
 	// Read the name of the graph from the keyboard or
 	// hard code it here for testing.
 
-	fileName = "knapsack/knapsack8.input";
+	fileName = "knapsack/knapsack1024.input";
 
 	//cout << "Enter filename" << endl;
 	//cin >> fileName;
@@ -54,10 +54,11 @@ int main()
 		greedyKnapsack(k);
 		simAnnealing(k);
 
-		//string output = "knapsack1024.output";
-		
+		string output = "/knapsack_SA_output/knapsack1024.output";
+
 		cout << endl << "Best solution" << endl;
 		k.printSolution();
+		k.printSolution(output);
 	}
 
 	catch (indexRangeError &ex)

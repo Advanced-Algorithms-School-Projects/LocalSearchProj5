@@ -89,7 +89,7 @@ int main()
 	// Read the name of the graph from the keyboard or
 	// hard code it here for testing.
 
-	fileName = "color/color12-3.input";
+	fileName = "color/color192-8.input";
 
 	//   cout << "Enter filename" << endl;
 	//   cin >> fileName;
@@ -115,9 +115,11 @@ int main()
 		cout << endl;
 
 		randGraph(g, numColors, numConflicts);
+		cout << "NumConflicts: " << numConflicts << endl;
 		steepDescent(g, numColors, numConflicts);
-		string output = "/Users/Cassie/source/repos/Project5/Project5/color12-3.output";
+		string output = "/color_SD_output/color192-8.output";
 		printSolution(g, numConflicts, output);
+		cout << "Best number of conflicts is " << numConflicts << endl;
 		system("pause");
 
 	}
@@ -144,7 +146,6 @@ void printSolution(Graph &g, int numConflicts, string filePath_output) {
 
 	myfile.close();
 }
-
 
 void randGraph(Graph &g, int numColors, int &numConflicts) {
 	srand(time(0));
@@ -209,22 +210,15 @@ void getBestNeighbor(Graph &g, int numColors, int &numConflicts) {
 
 int getConflicts(Graph &g) {
 	int numConflicts = 0;
-	//gets start and end vertex iterators (which allow you to access the vertex)
-	pair<Graph::vertex_iterator, Graph::vertex_iterator> vItrRange = vertices(g);
 
-	Graph::vertex_iterator firstNode = vItrRange.first;
-	Graph::vertex_iterator lastNode = vItrRange.second;
-	
-	for (Graph::vertex_iterator vItr = firstNode; vItr != lastNode; ++vItr) {
-		// Get a pair containing iterators pointing to the beginning and end of the
-		// list of nodes adjacent to node v
-		pair<Graph::adjacency_iterator, Graph::adjacency_iterator> adjRange = adjacent_vertices(*vItr, g);
+	pair<Graph::edge_iterator, Graph::edge_iterator> eItrRange = edges(g);
 
-		// Loop over adjacent nodes in the graph
-		for (Graph::adjacency_iterator Itr = adjRange.first; Itr != adjRange.second; ++Itr) {
-			if (g[*vItr].color == g[*Itr].color) {
-				numConflicts++;
-			}
+	for (Graph::edge_iterator eItr = eItrRange.first; eItr != eItrRange.second; ++eItr) {
+		Graph::vertex_descriptor v1 = target(*eItr, g);
+		Graph::vertex_descriptor v2 = source(*eItr, g);
+
+		if (g[v1].color == g[v2].color) {
+			numConflicts++;
 		}
 	}
 	return numConflicts;

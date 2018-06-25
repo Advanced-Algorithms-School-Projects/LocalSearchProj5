@@ -34,7 +34,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="graph2p5.cpp">
+    <ClCompile Include="knapsack1p5.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
